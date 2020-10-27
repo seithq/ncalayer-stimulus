@@ -4,8 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
+  "author": "danikarik <daniyar@hey.com>",
   "scripts": {
-    "start": "node server.js"
+    "build": "webpack",
+    "start": "webpack serve"
   },
   "engines": {
     "node": ">=11"
@@ -16,10 +18,12 @@
     "@babel/preset-env": "^7.10.4",
     "@seithq/ncalayer": "^0.2.5",
     "babel-loader": "^8.1.0",
-    "chokidar": "^3.4.1",
-    "express": "^4.17.1",
-    "stimulus": "^1.1.1",
+    "stimulus": "^1.1.1"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^4.5.0",
     "webpack": "^4.43.0",
-    "webpack-dev-middleware": "^3.7.2"
+    "webpack-cli": "^4.1.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }

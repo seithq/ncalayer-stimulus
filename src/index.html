@@ -3,12 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
-    <script src="bundle.js" async></script>
   </head>
   <body>
     <div data-controller="ncalayer">
       <div data-target="ncalayer.error" class="hidden">
-        <button data-action="ncalayer#reconnect">Reconnect</button>
+        <button data-action="ncalayer#reconnect">Reload page</button>
       </div>
       <div data-target="ncalayer.ui">
         <h1>Version: <span data-target="ncalayer.version"></span></h1>
