@@ -32,7 +32,6 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      title: "NCALayer Stimulus Demo",
       filename: "index.html",
       template: "src/index.html",
       favicon: "src/favicon.ico",
