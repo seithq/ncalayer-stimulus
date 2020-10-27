@@ -5,15 +5,130 @@
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div data-controller="ncalayer">
+    <div data-controller="ncalayer" data-ncalayer-storage="NONE" data-ncalayer-keytype="ALL" data-ncalayer-alias="">
       <div data-target="ncalayer.error" class="hidden">
-        <button data-action="ncalayer#reconnect">Reload page</button>
+        <div class="antialiased font-sans bg-gray-100 flex h-screen">
+          <div class="flex flex-col m-auto bg-red-400 rounded shadow-2xl text-center text-white p-8">
+            <svg class="w-16 fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path
+                d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 5h2v6H9V5zm0 8h2v2H9v-2z"
+              />
+            </svg>
+            <span class="font-bold text-3xl tracking-wider"> Ошибка при подключении к прослойке. </span>
+            <span class="font-semibold text-lg">
+              Убедитесь что программа запущена и
+              <span class="font-bold text-gray-900 cursor-pointer" data-action="click->ncalayer#reconnect">
+                перезагрузите страницу.
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
       <div data-target="ncalayer.ui">
-        <h1>Version: <span data-target="ncalayer.version"></span></h1>
+        <div class="bg-gray-300 min-h-screen py-8">
+          <div
+            class="container mx-auto rounded shadow-2xl bg-white antialiased font-sans tracking-wide leading-relaxed text-gray-800 text-sm flex flex-wrap"
+          >
+            <div class="w-full px-4 mt-4 flex justify-between">
+              <div class="flex flex-row bg-green-200 rounded px-4 py-2">
+                <span class="mr-2 font-semibold text-green-900"> Прослойка: </span>
+                <svg class="w-6 fill-current text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path
+                    d="M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h16V6H2zm1 1h4v6H3V7zm5 0h4v6H8V7zm5 0h4v6h-4V7z"
+                  />
+                </svg>
+              </div>
+              <div class="flex flex-row bg-blue-200 rounded px-4 py-2">
+                <span class="mr-2 font-bold text-blue-900">Версия:</span>
+                <span class="font-semibold text-blue-900" data-target="ncalayer.version"></span>
+              </div>
+            </div>
+            <div class="w-1/2 p-4">
+              <!-- BOX START -->
+              <div class="bg-gray-200 rounded px-4 py-2 mb-4 shadow-md">
+                <div id="storage-alias">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider">Тип хранилища ключа</span>
+                  </div>
+                  <select class="appearance-none w-full px-4 py-2 shadow-lg" data-action="ncalayer#browseKeyStore">
+                    <option value="NONE">-- Выберите тип --</option>
+                    <option value="PKCS12">Ваш Компьютер</option>
+                    <option value="AKKaztokenStore">Казтокен</option>
+                    <option value="AKKZIDCardStore">Личное Удостоверение</option>
+                    <option value="AKEToken72KStore">EToken Java 72k</option>
+                    <option value="AKJaCartaStore">AK JaCarta</option>
+                  </select>
+                </div>
 
-        <button data-action="ncalayer#browseKeyStore">browseKeyStore</button>
-        <p>Path: <span data-target="ncalayer.path"></span></p>
+                <div id="storage-path">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider">Путь хранилища ключа</span>
+                  </div>
+                  <input
+                    class="w-full px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    type="text"
+                    data-target="ncalayer.path"
+                    readonly
+                  />
+                </div>
+
+                <div id="password">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider">Пароль для хранилища</span>
+                  </div>
+                  <input
+                    class="w-full px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    type="password"
+                    data-target="ncalayer.password"
+                  />
+                </div>
+
+                <div id="key-type">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider">Тип ключа</span>
+                  </div>
+                  <div class="flex flex-row">
+                    <div
+                      data-keytype="SIGN"
+                      data-action="click->ncalayer#chooseKeyType"
+                      class="mr-2 px-4 py-2 rounded-full border border-solid border-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white bg-white text-teal-700"
+                    >
+                      Для подписи
+                    </div>
+                    <div
+                      data-keytype="AUTH"
+                      data-action="click->ncalayer#chooseKeyType"
+                      class="mr-2 px-4 py-2 rounded-full border border-solid border-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white bg-white text-teal-700"
+                    >
+                      Для аутентификаций
+                    </div>
+                    <div
+                      data-keytype="ALL"
+                      data-action="click->ncalayer#chooseKeyType"
+                      class="mr-2 px-4 py-2 rounded-full border border-solid border-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white bg-teal-700 text-white"
+                    >
+                      Любой
+                    </div>
+                  </div>
+                </div>
+
+                <div id="key-list">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider">Список ключей</span>
+                  </div>
+                  <select class="appearance-none w-full px-4 py-2 shadow-lg" data-target="ncalayer.key-list"></select>
+                  <button
+                    class="mt-4 px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                    data-action="ncalayer#getKeys"
+                  >
+                    Обновить список ключей
+                  </button>
+                </div>
+              </div>
+              <!-- BOX END -->
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>

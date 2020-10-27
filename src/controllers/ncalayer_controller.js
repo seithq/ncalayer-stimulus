@@ -1,8 +1,8 @@
 import { Controller } from "stimulus"
-import Client from "@seithq/ncalayer"
+import Client, { extractKeyAlias } from "@seithq/ncalayer"
 
 export default class extends Controller {
-  static targets = ["error", "ui", "version", "path"]
+  static targets = ["error", "ui", "version", "path", "password", "key-list"]
 
   initialize() {}
 
@@ -61,9 +61,41 @@ export default class extends Controller {
     this.targets.find("error").classList.add("hidden")
   }
 
-  browseKeyStore() {
-    this.client.browseKeyStore("PKCS12", "P12", "", (data) => {
-      this.targets.find("path").textContent = data.result
+  chooseKeyType(e) {
+    this.data.set("keytype", e.target.dataset.keytype)
+
+    const keyTypes = [...e.target.parentNode.getElementsByTagName("div")]
+    keyTypes.forEach((element) => {
+      if (element.dataset.keytype === this.data.get("keytype")) {
+        element.classList.add("bg-teal-700", "text-white")
+        element.classList.remove("bg-white", "text-teal-700")
+      } else {
+        element.classList.add("bg-white", "text-teal-700")
+        element.classList.remove("bg-teal-700", "text-white")
+      }
     })
+  }
+
+  // NCALayer API
+
+  browseKeyStore(e) {
+    this.data.set("storage", e.target.value)
+    this.client.browseKeyStore(e.target.value, "P12", "", (data) => {
+      this.targets.find("path").value = data.getResult()
+    })
+  }
+
+  getKeys() {
+    this.client.getKeys(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.targets.find("password").value,
+      this.data.get("keytype"),
+      (data) => {
+        const alias = extractKeyAlias(data.getResult())
+        this.targets.find("key-list").append(new Option(data.getResult(), alias))
+        this.data.set("alias", alias)
+      }
+    )
   }
 }
