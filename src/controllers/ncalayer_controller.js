@@ -61,11 +61,11 @@ export default class extends Controller {
   }
 
   chooseKeyType(e) {
-    this.data.set("keytype", e.target.dataset.keytype)
+    this.data.set("keytype", e.target.getAttribute("keytype"))
 
     const keyTypes = [...e.target.parentNode.getElementsByTagName("div")]
     keyTypes.forEach((element) => {
-      if (element.dataset.keytype === this.data.get("keytype")) {
+      if (element.getAttribute("keytype") === this.data.get("keytype")) {
         element.classList.add("bg-teal-700", "text-white")
         element.classList.remove("bg-white", "text-teal-700")
       } else {
