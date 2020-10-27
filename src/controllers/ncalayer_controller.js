@@ -42,7 +42,6 @@ export default class extends Controller {
         setTimeout(() => {
           clearInterval(vPing)
         }, 100)
-      } else {
       }
     }, 500)
   }
