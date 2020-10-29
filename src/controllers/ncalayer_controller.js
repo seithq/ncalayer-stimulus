@@ -47,6 +47,16 @@ export default class extends Controller {
     "xml",
     "signed-xml",
     "check-xml",
+
+    "xml-node",
+    "xml-node-element",
+    "xml-node-attribute",
+    "xml-node-root",
+    "signed-xml-node",
+    "xml-node-attribute-check",
+    "xml-node-root-check",
+    "check-xml-node",
+
     "algorithm",
     "hash-data",
     "hash",
@@ -54,6 +64,7 @@ export default class extends Controller {
 
   initialize() {
     this.targets.find("xml").value = defaultXML
+    this.targets.find("xml-node").value = defaultXMLByElementId
   }
 
   connect() {
@@ -348,6 +359,33 @@ export default class extends Controller {
     this.client.verifyXml(this.targets.find("signed-xml").value, (data) => {
       this.markAsValidated(this.targets.find("check-xml"), data.getResult())
     })
+  }
+
+  signXmlByElementId() {
+    this.client.signXmlByElementId(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      this.targets.find("xml-node").value,
+      this.targets.find("xml-node-element").value,
+      this.targets.find("xml-node-attribute").value,
+      this.targets.find("xml-node-root").value,
+      (data) => {
+        this.targets.find("signed-xml-node").value = data.getResult()
+      }
+    )
+  }
+
+  verifyXmlByElementId() {
+    this.client.verifyXmlByElementId(
+      this.targets.find("signed-xml-node").value,
+      this.targets.find("xml-node-attribute-check").value,
+      this.targets.find("xml-node-root-check").value,
+      (data) => {
+        this.markAsValidated(this.targets.find("check-xml-node"), data.getResult())
+      }
+    )
   }
 
   getHash() {
