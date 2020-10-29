@@ -7,7 +7,13 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <div data-controller="ncalayer" data-ncalayer-storage="NONE" data-ncalayer-keytype="ALL" data-ncalayer-alias="">
+    <div
+      data-controller="ncalayer"
+      data-ncalayer-storage="NONE"
+      data-ncalayer-keytype="ALL"
+      data-ncalayer-alias=""
+      data-ncalayer-locale="ru"
+    >
       <div data-target="ncalayer.error" class="hidden">
         <div class="antialiased font-sans bg-gray-100 flex h-screen">
           <div class="flex flex-col m-auto bg-red-400 rounded shadow-2xl text-center text-white p-8">
@@ -124,6 +130,83 @@
                     data-action="ncalayer#getKeys"
                   >
                     Обновить список ключей
+                  </button>
+                </div>
+              </div>
+              <!-- BOX END -->
+
+              <!-- BOX START -->
+              <div class="bg-gray-200 rounded px-4 py-2 mb-4 shadow-md">
+                <div id="locale">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider">Язык</span>
+                  </div>
+                  <div class="flex flex-row mb-4">
+                    <div
+                      data-locale="kk"
+                      data-action="click->ncalayer#setLocale"
+                      class="mr-2 px-4 py-2 rounded-full border border-solid border-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white bg-white text-teal-700"
+                    >
+                      Казахский
+                    </div>
+                    <div
+                      data-locale="ru"
+                      data-action="click->ncalayer#setLocale"
+                      class="mr-2 px-4 py-2 rounded-full border border-solid border-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white bg-teal-700 text-white"
+                    >
+                      Русский
+                    </div>
+                    <div
+                      data-locale="en"
+                      data-action="click->ncalayer#setLocale"
+                      class="mr-2 px-4 py-2 rounded-full border border-solid border-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white bg-white text-teal-700"
+                    >
+                      Английский
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- BOX END -->
+
+              <!-- BOX START -->
+              <div class="bg-gray-200 rounded px-4 py-2 mb-4 shadow-md">
+                <div id="not-before">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Время начала действия сертификата <span class="font-extrabold">(getNotBefore)</span></span
+                    >
+                  </div>
+                  <input
+                    class="w-full px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    type="text"
+                    data-target="ncalayer.not-before"
+                    readonly
+                  />
+                  <button
+                    class="mt-2 px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                    data-action="ncalayer#getNotBefore"
+                  >
+                    Узнать
+                  </button>
+                </div>
+
+                <div id="not-after">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Время исхода действия сертификата <span class="font-extrabold">(getNotAfter)</span></span
+                    >
+                  </div>
+                  <input
+                    class="w-full px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    type="text"
+                    data-target="ncalayer.not-after"
+                    readonly
+                  />
+                  <button
+                    class="mt-2 px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                    data-action="ncalayer#getNotAfter"
+                  >
+                    Узнать
                   </button>
                 </div>
               </div>

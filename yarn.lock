@@ -787,10 +787,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@seithq/ncalayer@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@seithq/ncalayer/-/ncalayer-0.2.5.tgz#fab65486461d594026c352708252d06cd14fa724"
-  integrity sha512-+H3s9QwgvAjAfJUIBfsPY/45ugh51XEw1MwVmbVWgJUdyOpUK7vyGYKbKn2FiydzZxKL4wZ2kehYomY4qGyo9Q==
+"@seithq/ncalayer@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@seithq/ncalayer/-/ncalayer-0.2.6.tgz#a26488b9a3b8ccbcdfacabb7d9eda16ae3e48f72"
+  integrity sha512-xiYf4QrsrchooLtHpQbjTV1XpjMKoLMJ6uuMn8ZOxxpgD9GWHqRP5Ib2gEPy//Y17FAoUjH8LznP0k29uqmh2w==
 
 "@stimulus/core@^1.1.1":
   version "1.1.1"
