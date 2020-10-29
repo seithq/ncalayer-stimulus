@@ -451,7 +451,7 @@
                       Подпиcать данные
                     </button>
                     <label class="flex items-center font-semibold text-gray-600">
-                      <input type="checkbox" class="mr-2 leading-wider" data-target="ncalayer.cms-inclusion" />
+                      <input type="checkbox" class="mr-2 leading-wider" data-target="ncalayer.cms-attachment" />
                       <span class="text-base">Включить данные в подпись</span>
                     </label>
                   </div>
@@ -474,6 +474,63 @@
                     <span
                       class="px-4 py-2 rounded-lg border border-solid border-2 text-center font-semibold text-orange-600 border-orange-600 bg-orange-200"
                       data-target="ncalayer.check-cms-signature"
+                    >
+                      Не проверено
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <!-- BOX END -->
+
+              <!-- BOX START -->
+              <div class="bg-gray-200 rounded px-4 py-2 mb-4 shadow-md">
+                <div id="cms-signature-file">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider">Путь к файлу для подписи</span>
+                  </div>
+                  <input
+                    class="w-full px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    type="text"
+                    data-target="ncalayer.cms-signature-file-path"
+                    readonly
+                  />
+                  <button
+                    class="mt-4 px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                    data-action="ncalayer#showFileChooser"
+                  >
+                    Выбрать файл
+                  </button>
+                  <div class="mt-2 flex flex-row justify-between">
+                    <button
+                      class="px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                      data-action="ncalayer#createCMSSignatureFromFile"
+                    >
+                      Подпиcать данные
+                    </button>
+                    <label class="flex items-center font-semibold text-gray-600">
+                      <input type="checkbox" class="mr-2 leading-wider" data-target="ncalayer.cms-file-attachment" />
+                      <span class="text-base">Включить данные в подпись</span>
+                    </label>
+                  </div>
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Проверить данные <span class="font-extrabold">(verifyCMSSignatureFromFile)</span></span
+                    >
+                  </div>
+                  <textarea
+                    class="resize-none w-full h-48 px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    data-target="ncalayer.signed-cms-signature-file"
+                  ></textarea>
+                  <div class="mt-4 flex flex-row justify-between">
+                    <button
+                      class="px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                      data-action="ncalayer#verifyCMSSignatureFromFile"
+                    >
+                      Проверить данные
+                    </button>
+                    <span
+                      class="px-4 py-2 rounded-lg border border-solid border-2 text-center font-semibold text-orange-600 border-orange-600 bg-orange-200"
+                      data-target="ncalayer.check-cms-signature-file"
                     >
                       Не проверено
                     </span>

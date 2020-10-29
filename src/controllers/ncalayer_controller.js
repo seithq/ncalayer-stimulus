@@ -17,9 +17,13 @@ export default class extends Controller {
     "signed-plain-data",
     "check-data",
     "cms-signature",
-    "cms-inclusion",
+    "cms-attachment",
     "signed-cms-signature",
     "check-cms-signature",
+    "cms-signature-file-path",
+    "cms-file-attachment",
+    "signed-cms-signature-file",
+    "check-cms-signature-file",
   ]
 
   initialize() {}
@@ -252,7 +256,7 @@ export default class extends Controller {
       this.data.get("alias"),
       this.targets.find("password").value,
       this.targets.find("cms-signature").value,
-      this.targets.find("cms-inclusion").checked,
+      this.targets.find("cms-attachment").checked,
       (data) => {
         this.targets.find("signed-cms-signature").value = data.getResult()
       }
@@ -265,6 +269,36 @@ export default class extends Controller {
       this.targets.find("signed-cms-signature").value,
       (data) => {
         this.markAsValidated(this.targets.find("check-cms-signature"), data.getResult())
+      }
+    )
+  }
+
+  showFileChooser() {
+    this.client.showFileChooser("ALL", "", (data) => {
+      this.targets.find("cms-signature-file-path").value = data.getResult()
+    })
+  }
+
+  createCMSSignatureFromFile() {
+    this.client.createCMSSignatureFromFile(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      this.targets.find("cms-signature-file-path").value,
+      this.targets.find("cms-file-attachment").checked,
+      (data) => {
+        this.targets.find("signed-cms-signature-file").value = data.getResult()
+      }
+    )
+  }
+
+  verifyCMSSignatureFromFile() {
+    this.client.verifyCMSSignatureFromFile(
+      this.targets.find("cms-signature-file-path").value,
+      this.targets.find("signed-cms-signature-file").value,
+      (data) => {
+        this.markAsValidated(this.targets.find("check-cms-signature-file"), data.getResult())
       }
     )
   }
