@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import Client, { extractKeyAlias } from "@seithq/ncalayer"
 
 export default class extends Controller {
-  static targets = ["error", "ui", "version", "path", "password", "key-list", "not-before"]
+  static targets = ["error", "ui", "version", "path", "password", "key-list", "not-before", "subject-dn", "issuer-dn"]
 
   initialize() {}
 
@@ -132,6 +132,30 @@ export default class extends Controller {
       this.targets.find("password").value,
       (data) => {
         this.targets.find("not-after").value = data.getResult()
+      }
+    )
+  }
+
+  getSubjectDN() {
+    this.client.getSubjectDN(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      (data) => {
+        this.targets.find("subject-dn").value = data.getResult()
+      }
+    )
+  }
+
+  getIssuerDN() {
+    this.client.getIssuerDN(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      (data) => {
+        this.targets.find("issuer-dn").value = data.getResult()
       }
     )
   }
