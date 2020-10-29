@@ -47,6 +47,9 @@ export default class extends Controller {
     "xml",
     "signed-xml",
     "check-xml",
+    "algorithm",
+    "hash-data",
+    "hash",
   ]
 
   initialize() {
@@ -344,6 +347,12 @@ export default class extends Controller {
   verifyXml() {
     this.client.verifyXml(this.targets.find("signed-xml").value, (data) => {
       this.markAsValidated(this.targets.find("check-xml"), data.getResult())
+    })
+  }
+
+  getHash() {
+    this.client.getHash(this.targets.find("hash-data").value, this.targets.find("algorithm").value, (data) => {
+      this.targets.find("hash").value = data.getResult()
     })
   }
 }

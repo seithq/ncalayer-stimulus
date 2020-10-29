@@ -584,6 +584,44 @@
                 </div>
               </div>
               <!-- BOX END -->
+
+              <!-- BOX START -->
+              <div class="bg-gray-200 rounded px-4 py-2 mb-4 shadow-md">
+                <div id="hash">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Получить хэш данных по указанному алгоритму <span class="font-extrabold">(getHash)</span></span
+                    >
+                  </div>
+                  <select class="appearance-none w-full px-4 py-2 shadow-lg" data-target="ncalayer.algorithm">
+                    <option value="SHA1">SHA1</option>
+                    <option value="SHA256">SHA256</option>
+                    <option value="GOST34311">GOST34311</option>
+                  </select>
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Введите данные для хеширование</span
+                    >
+                  </div>
+                  <input
+                    class="w-full px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    type="text"
+                    data-target="ncalayer.hash-data"
+                  />
+                  <textarea
+                    class="mt-4 resize-none w-full h-32 px-4 py-2 shadow-lg rounded outline-none text-white"
+                    style="background-color: #23262e"
+                    data-target="ncalayer.hash"
+                  ></textarea>
+                  <button
+                    class="px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                    data-action="ncalayer#getHash"
+                  >
+                    Получить хэш
+                  </button>
+                </div>
+              </div>
+              <!-- BOX END -->
             </div>
           </div>
         </div>
