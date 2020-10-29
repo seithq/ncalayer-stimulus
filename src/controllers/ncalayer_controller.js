@@ -2,7 +2,18 @@ import { Controller } from "stimulus"
 import Client, { extractKeyAlias } from "@seithq/ncalayer"
 
 export default class extends Controller {
-  static targets = ["error", "ui", "version", "path", "password", "key-list", "not-before", "subject-dn", "issuer-dn"]
+  static targets = [
+    "error",
+    "ui",
+    "version",
+    "path",
+    "password",
+    "key-list",
+    "not-before",
+    "subject-dn",
+    "issuer-dn",
+    "rdn",
+  ]
 
   initialize() {}
 
@@ -60,6 +71,10 @@ export default class extends Controller {
     this.targets.find("error").classList.add("hidden")
   }
 
+  get oid() {
+    return parseInt(this.data.get("oid"))
+  }
+
   markAsRadioButton(element, isActive) {
     if (isActive) {
       element.classList.add("bg-teal-700", "text-white")
@@ -87,6 +102,14 @@ export default class extends Controller {
     })
 
     this.client.setLocale(this.data.get("locale"), (data) => {})
+  }
+
+  chooseOID(e) {
+    this.data.set("oid", e.target.dataset.oid)
+    const oids = [...e.target.parentNode.parentNode.querySelectorAll("[data-oid]")]
+    oids.forEach((element) => {
+      this.markAsRadioButton(element, element.dataset.oid === this.data.get("oid"))
+    })
   }
 
   // NCALayer API
@@ -156,6 +179,20 @@ export default class extends Controller {
       this.targets.find("password").value,
       (data) => {
         this.targets.find("issuer-dn").value = data.getResult()
+      }
+    )
+  }
+
+  getRdnByOid() {
+    this.client.getRdnByOid(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      this.data.get("oid"),
+      0,
+      (data) => {
+        this.targets.find("rdn").value = data.getResult()
       }
     )
   }
