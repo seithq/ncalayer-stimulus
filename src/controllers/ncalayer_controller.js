@@ -26,24 +26,33 @@ export default class extends Controller {
     "error",
     "ui",
     "version",
+
     "path",
     "password",
     "key-list",
+
     "not-before",
+    "not-after",
+
     "subject-dn",
     "issuer-dn",
+
     "rdn",
+
     "plain-data",
     "signed-plain-data",
     "check-data",
+
     "cms-signature",
     "cms-attachment",
     "signed-cms-signature",
     "check-cms-signature",
+
     "cms-signature-file-path",
     "cms-file-attachment",
     "signed-cms-signature-file",
     "check-cms-signature-file",
+
     "xml",
     "signed-xml",
     "check-xml",
@@ -83,7 +92,9 @@ export default class extends Controller {
       if (e.wasClean) {
         console.log("connection closed")
       } else {
-        console.log("connection error: [code]=" + e.code + ", [reason]=" + e.reason)
+        console.log(
+          "connection error: [code]=" + e.code + ", [reason]=" + e.reason
+        )
       }
       this.showError()
     }
@@ -136,15 +147,27 @@ export default class extends Controller {
   }
 
   markAsValidated(element, isValid) {
-    element.classList.remove("text-orange-600", "border-orange-600", "bg-orange-200")
+    element.classList.remove(
+      "text-orange-600",
+      "border-orange-600",
+      "bg-orange-200"
+    )
 
     if (isValid) {
-      element.classList.add("text-green-600", "border-green-600", "bg-green-200")
+      element.classList.add(
+        "text-green-600",
+        "border-green-600",
+        "bg-green-200"
+      )
       element.classList.remove("text-red-600", "border-red-600", "bg-red-200")
       element.textContent = "Валидная подпись"
     } else {
       element.classList.add("text-red-600", "border-red-600", "bg-red-200")
-      element.classList.remove("text-green-600", "border-green-600", "bg-green-200")
+      element.classList.remove(
+        "text-green-600",
+        "border-green-600",
+        "bg-green-200"
+      )
       element.textContent = "Неправильная подпись"
     }
   }
@@ -153,7 +176,10 @@ export default class extends Controller {
     this.data.set("keytype", e.target.dataset.keytype)
     const keyTypes = [...e.target.parentNode.getElementsByTagName("div")]
     keyTypes.forEach((element) => {
-      this.markAsRadioButton(element, element.dataset.keytype === this.data.get("keytype"))
+      this.markAsRadioButton(
+        element,
+        element.dataset.keytype === this.data.get("keytype")
+      )
     })
   }
 
@@ -162,7 +188,10 @@ export default class extends Controller {
 
     const locales = [...e.target.parentNode.getElementsByTagName("div")]
     locales.forEach((element) => {
-      this.markAsRadioButton(element, element.dataset.locale === this.data.get("locale"))
+      this.markAsRadioButton(
+        element,
+        element.dataset.locale === this.data.get("locale")
+      )
     })
 
     this.client.setLocale(this.data.get("locale"), (data) => {})
@@ -170,10 +199,24 @@ export default class extends Controller {
 
   chooseOID(e) {
     this.data.set("oid", e.target.dataset.oid)
-    const oids = [...e.target.parentNode.parentNode.querySelectorAll("[data-oid]")]
+    const oids = [
+      ...e.target.parentNode.parentNode.querySelectorAll("[data-oid]"),
+    ]
     oids.forEach((element) => {
-      this.markAsRadioButton(element, element.dataset.oid === this.data.get("oid"))
+      this.markAsRadioButton(
+        element,
+        element.dataset.oid === this.data.get("oid")
+      )
     })
+  }
+
+  secureFields() {
+    return [
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+    ]
   }
 
   // NCALayer API
@@ -193,66 +236,41 @@ export default class extends Controller {
       this.data.get("keytype"),
       (data) => {
         const alias = extractKeyAlias(data.getResult())
-        this.targets.find("key-list").append(new Option(data.getResult(), alias))
+        this.targets
+          .find("key-list")
+          .append(new Option(data.getResult(), alias))
         this.data.set("alias", alias)
       }
     )
   }
 
   getNotBefore() {
-    this.client.getNotBefore(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
-      (data) => {
-        this.targets.find("not-before").value = data.getResult()
-      }
-    )
+    this.client.getNotBefore(...this.secureFields(), (data) => {
+      this.targets.find("not-before").value = data.getResult()
+    })
   }
 
   getNotAfter() {
-    this.client.getNotAfter(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
-      (data) => {
-        this.targets.find("not-after").value = data.getResult()
-      }
-    )
+    this.client.getNotAfter(...this.secureFields(), (data) => {
+      this.targets.find("not-after").value = data.getResult()
+    })
   }
 
   getSubjectDN() {
-    this.client.getSubjectDN(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
-      (data) => {
-        this.targets.find("subject-dn").value = data.getResult()
-      }
-    )
+    this.client.getSubjectDN(...this.secureFields(), (data) => {
+      this.targets.find("subject-dn").value = data.getResult()
+    })
   }
 
   getIssuerDN() {
-    this.client.getIssuerDN(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
-      (data) => {
-        this.targets.find("issuer-dn").value = data.getResult()
-      }
-    )
+    this.client.getIssuerDN(...this.secureFields(), (data) => {
+      this.targets.find("issuer-dn").value = data.getResult()
+    })
   }
 
   getRdnByOid() {
     this.client.getRdnByOid(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
+      ...this.secureFields(),
       this.data.get("oid"),
       0,
       (data) => {
@@ -263,10 +281,7 @@ export default class extends Controller {
 
   signPlainData() {
     this.client.signPlainData(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
+      ...this.secureFields(),
       this.targets.find("plain-data").value,
       (data) => {
         this.targets.find("signed-plain-data").value = data.getResult()
@@ -276,10 +291,7 @@ export default class extends Controller {
 
   verifyPlainData() {
     this.client.verifyPlainData(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
+      ...this.secureFields(),
       this.targets.find("plain-data").value,
       this.targets.find("signed-plain-data").value,
       (data) => {
@@ -290,10 +302,7 @@ export default class extends Controller {
 
   createCMSSignature() {
     this.client.createCMSSignature(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
+      ...this.secureFields(),
       this.targets.find("cms-signature").value,
       this.targets.find("cms-attachment").checked,
       (data) => {
@@ -307,7 +316,10 @@ export default class extends Controller {
       this.targets.find("cms-signature").value,
       this.targets.find("signed-cms-signature").value,
       (data) => {
-        this.markAsValidated(this.targets.find("check-cms-signature"), data.getResult())
+        this.markAsValidated(
+          this.targets.find("check-cms-signature"),
+          data.getResult()
+        )
       }
     )
   }
@@ -320,10 +332,7 @@ export default class extends Controller {
 
   createCMSSignatureFromFile() {
     this.client.createCMSSignatureFromFile(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
+      ...this.secureFields(),
       this.targets.find("cms-signature-file-path").value,
       this.targets.find("cms-file-attachment").checked,
       (data) => {
@@ -337,17 +346,17 @@ export default class extends Controller {
       this.targets.find("cms-signature-file-path").value,
       this.targets.find("signed-cms-signature-file").value,
       (data) => {
-        this.markAsValidated(this.targets.find("check-cms-signature-file"), data.getResult())
+        this.markAsValidated(
+          this.targets.find("check-cms-signature-file"),
+          data.getResult()
+        )
       }
     )
   }
 
   signXml() {
     this.client.signXml(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
+      ...this.secureFields(),
       this.targets.find("xml").value,
       (data) => {
         this.targets.find("signed-xml").value = data.getResult()
@@ -363,10 +372,7 @@ export default class extends Controller {
 
   signXmlByElementId() {
     this.client.signXmlByElementId(
-      this.data.get("storage"),
-      this.targets.find("path").value,
-      this.data.get("alias"),
-      this.targets.find("password").value,
+      ...this.secureFields(),
       this.targets.find("xml-node").value,
       this.targets.find("xml-node-element").value,
       this.targets.find("xml-node-attribute").value,
@@ -383,14 +389,21 @@ export default class extends Controller {
       this.targets.find("xml-node-attribute-check").value,
       this.targets.find("xml-node-root-check").value,
       (data) => {
-        this.markAsValidated(this.targets.find("check-xml-node"), data.getResult())
+        this.markAsValidated(
+          this.targets.find("check-xml-node"),
+          data.getResult()
+        )
       }
     )
   }
 
   getHash() {
-    this.client.getHash(this.targets.find("hash-data").value, this.targets.find("algorithm").value, (data) => {
-      this.targets.find("hash").value = data.getResult()
-    })
+    this.client.getHash(
+      this.targets.find("hash-data").value,
+      this.targets.find("algorithm").value,
+      (data) => {
+        this.targets.find("hash").value = data.getResult()
+      }
+    )
   }
 }
