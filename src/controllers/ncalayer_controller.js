@@ -14,8 +14,12 @@ export default class extends Controller {
     "issuer-dn",
     "rdn",
     "plain-data",
-    "signed-data",
+    "signed-plain-data",
     "check-data",
+    "cms-signature",
+    "cms-inclusion",
+    "signed-cms-signature",
+    "check-cms-signature",
   ]
 
   initialize() {}
@@ -222,7 +226,7 @@ export default class extends Controller {
       this.targets.find("password").value,
       this.targets.find("plain-data").value,
       (data) => {
-        this.targets.find("signed-data").value = data.getResult()
+        this.targets.find("signed-plain-data").value = data.getResult()
       }
     )
   }
@@ -234,10 +238,33 @@ export default class extends Controller {
       this.data.get("alias"),
       this.targets.find("password").value,
       this.targets.find("plain-data").value,
-      this.targets.find("signed-data").value,
+      this.targets.find("signed-plain-data").value,
       (data) => {
-        console.log(data)
         this.markAsValidated(this.targets.find("check-data"), data.getResult())
+      }
+    )
+  }
+
+  createCMSSignature() {
+    this.client.createCMSSignature(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      this.targets.find("cms-signature").value,
+      this.targets.find("cms-inclusion").checked,
+      (data) => {
+        this.targets.find("signed-cms-signature").value = data.getResult()
+      }
+    )
+  }
+
+  verifyCMSSignature() {
+    this.client.verifyCMSSignature(
+      this.targets.find("cms-signature").value,
+      this.targets.find("signed-cms-signature").value,
+      (data) => {
+        this.markAsValidated(this.targets.find("check-cms-signature"), data.getResult())
       }
     )
   }

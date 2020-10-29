@@ -16,7 +16,7 @@
     "@babel/core": "^7.10.5",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
-    "@seithq/ncalayer": "^0.2.6",
+    "@seithq/ncalayer": "^0.2.7",
     "babel-loader": "^8.1.0",
     "stimulus": "^1.1.1"
   },
