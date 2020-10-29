@@ -538,6 +538,52 @@
                 </div>
               </div>
               <!-- BOX END -->
+
+              <!-- BOX START -->
+              <div class="bg-gray-200 rounded px-4 py-2 mb-4 shadow-md">
+                <div id="xml">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >XML для подписи <span class="font-extrabold">(signXML)</span></span
+                    >
+                  </div>
+                  <textarea
+                    class="resize-none w-full h-48 px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    data-target="ncalayer.xml"
+                  ></textarea>
+                  <button
+                    class="mt-4 px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                    data-action="ncalayer#signXml"
+                  >
+                    Подпиcать данные
+                  </button>
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Проверить подписанный XML <span class="font-extrabold">(verifyXml)</span></span
+                    >
+                  </div>
+                  <textarea
+                    class="resize-none w-full h-64 px-4 py-2 shadow-lg rounded outline-none text-white"
+                    style="background-color: #23262e"
+                    data-target="ncalayer.signed-xml"
+                  ></textarea>
+                  <div class="mt-4 flex flex-row justify-between">
+                    <button
+                      class="px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                      data-action="ncalayer#verifyXml"
+                    >
+                      Проверить данные
+                    </button>
+                    <span
+                      class="px-4 py-2 rounded-lg border border-solid border-2 text-center font-semibold text-orange-600 border-orange-600 bg-orange-200"
+                      data-target="ncalayer.check-xml"
+                    >
+                      Не проверено
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <!-- BOX END -->
             </div>
           </div>
         </div>

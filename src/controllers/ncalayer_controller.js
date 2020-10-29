@@ -1,6 +1,26 @@
 import { Controller } from "stimulus"
 import Client, { extractKeyAlias } from "@seithq/ncalayer"
 
+const defaultXML = `<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <name>Ivan</name>
+  <iin>123456789012</iin>
+</root>
+`
+
+const defaultXMLByElementId = `<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <person id="personId">
+      <name>Ivan</name>
+      <iin>123456789012</iin>
+    </person>
+    <company id="companyId">
+      <name>Company Name</name>
+      <bin>123456789012</bin>
+    </company>
+</root>
+`
+
 export default class extends Controller {
   static targets = [
     "error",
@@ -24,9 +44,14 @@ export default class extends Controller {
     "cms-file-attachment",
     "signed-cms-signature-file",
     "check-cms-signature-file",
+    "xml",
+    "signed-xml",
+    "check-xml",
   ]
 
-  initialize() {}
+  initialize() {
+    this.targets.find("xml").value = defaultXML
+  }
 
   connect() {
     let ws = new WebSocket("wss://127.0.0.1:13579/")
@@ -301,5 +326,24 @@ export default class extends Controller {
         this.markAsValidated(this.targets.find("check-cms-signature-file"), data.getResult())
       }
     )
+  }
+
+  signXml() {
+    this.client.signXml(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      this.targets.find("xml").value,
+      (data) => {
+        this.targets.find("signed-xml").value = data.getResult()
+      }
+    )
+  }
+
+  verifyXml() {
+    this.client.verifyXml(this.targets.find("signed-xml").value, (data) => {
+      this.markAsValidated(this.targets.find("check-xml"), data.getResult())
+    })
   }
 }
