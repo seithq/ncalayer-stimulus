@@ -13,6 +13,9 @@ export default class extends Controller {
     "subject-dn",
     "issuer-dn",
     "rdn",
+    "plain-data",
+    "signed-data",
+    "check-data",
   ]
 
   initialize() {}
@@ -82,6 +85,20 @@ export default class extends Controller {
     } else {
       element.classList.add("bg-white", "text-teal-700")
       element.classList.remove("bg-teal-700", "text-white")
+    }
+  }
+
+  markAsValidated(element, isValid) {
+    element.classList.remove("text-orange-600", "border-orange-600", "bg-orange-200")
+
+    if (isValid) {
+      element.classList.add("text-green-600", "border-green-600", "bg-green-200")
+      element.classList.remove("text-red-600", "border-red-600", "bg-red-200")
+      element.textContent = "Валидная подпись"
+    } else {
+      element.classList.add("text-red-600", "border-red-600", "bg-red-200")
+      element.classList.remove("text-green-600", "border-green-600", "bg-green-200")
+      element.textContent = "Неправильная подпись"
     }
   }
 
@@ -193,6 +210,34 @@ export default class extends Controller {
       0,
       (data) => {
         this.targets.find("rdn").value = data.getResult()
+      }
+    )
+  }
+
+  signPlainData() {
+    this.client.signPlainData(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      this.targets.find("plain-data").value,
+      (data) => {
+        this.targets.find("signed-data").value = data.getResult()
+      }
+    )
+  }
+
+  verifyPlainData() {
+    this.client.verifyPlainData(
+      this.data.get("storage"),
+      this.targets.find("path").value,
+      this.data.get("alias"),
+      this.targets.find("password").value,
+      this.targets.find("plain-data").value,
+      this.targets.find("signed-data").value,
+      (data) => {
+        console.log(data)
+        this.markAsValidated(this.targets.find("check-data"), data.getResult())
       }
     )
   }

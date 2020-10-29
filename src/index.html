@@ -383,6 +383,52 @@
                 </div>
               </div>
               <!-- BOX END -->
+
+              <!-- BOX START -->
+              <div class="bg-gray-200 rounded px-4 py-2 mb-4 shadow-md">
+                <div id="plain-data">
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Введите данные для подписи <span class="font-extrabold">(signPlainData)</span></span
+                    >
+                  </div>
+                  <input
+                    class="w-full px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    type="text"
+                    data-target="ncalayer.plain-data"
+                  />
+                  <button
+                    class="mt-4 px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                    data-action="ncalayer#signPlainData"
+                  >
+                    Подпиcать данные
+                  </button>
+                  <div class="my-2">
+                    <span class="text-lg text-gray-700 font-semibold tracking-wider"
+                      >Проверить подписанные данные <span class="font-extrabold">(verifyPlainData)</span></span
+                    >
+                  </div>
+                  <textarea
+                    class="resize-none w-full h-48 px-4 py-2 shadow-lg rounded hover:bg-gray-100 outline-none"
+                    data-target="ncalayer.signed-data"
+                  ></textarea>
+                  <div class="mt-4 flex flex-row justify-between">
+                    <button
+                      class="px-4 py-2 rounded bg-white border border-solid border-teal-700 text-teal-700 font-semibold tracking-wider hover:bg-teal-700 hover:text-white"
+                      data-action="ncalayer#verifyPlainData"
+                    >
+                      Проверить данные
+                    </button>
+                    <span
+                      class="px-4 py-2 rounded-lg border border-solid border-2 text-center font-semibold text-orange-600 border-orange-600 bg-orange-200"
+                      data-target="ncalayer.check-data"
+                    >
+                      Не проверено
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <!-- BOX END -->
             </div>
           </div>
         </div>
