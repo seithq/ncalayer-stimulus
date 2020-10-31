@@ -208,36 +208,47 @@ export default class extends Controller {
     this.targets.find("api-error-code").value =
       data.getErrorCode() === "NONE" ? "" : data.getErrorCode()
 
-    if (!data.isOk()) this.targets.find("api-error-message").value = this.getErrorMessage()
+    if (!data.isOk()) this.targets.find("api-error-message").value = this.getErrorMessage(data)
   }
 
   getErrorMessage(data) {
     if (data.isPasswordAttemptsError()) {
+      return "Неправильный пароль! Количество оставшихся попыток: " + this.getResult()
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isPasswordError()) {
+      return "Неправильный пароль!"
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isKeyTypeError()) {
+      return "Ключи не найдены. Попробуйте выбрать другой тип ключа"
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isRdnNotFoundError()) {
+      return "Ключ не содержит данный параметр"
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isXmlParseError()) {
+      return "Неверный формат XML"
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isSignatureValidationError()) {
+      return "Ошибка валидации подписи"
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isKeyStoreError()) {
+      return "Хранилище ключа не установлено"
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isUnknownStorageError()) {
+      return "Неверный или пустой тип хранилища"
     }
 
-    if (data.isPasswordAttemptsError()) {
+    if (data.isCommonError()) {
+      return "Общая ошибка"
     }
+
+    return ""
   }
 
   // NCALayer API
@@ -337,8 +348,7 @@ export default class extends Controller {
       this.targets.find("signed-plain-data").value,
       (data) => {
         this.showApiResponse(data)
-
-        if (data.isOk()) this.markAsValidated(this.targets.find("check-data"), data.getResult())
+        this.markAsValidated(this.targets.find("check-data"), data.isOk() && data.getResult())
       }
     )
   }
@@ -364,9 +374,10 @@ export default class extends Controller {
       this.targets.find("signed-cms-signature").value,
       (data) => {
         this.showApiResponse(data)
-
-        if (data.isOk())
-          this.markAsValidated(this.targets.find("check-cms-signature"), data.getResult())
+        this.markAsValidated(
+          this.targets.find("check-cms-signature"),
+          data.isOk() && data.getResult()
+        )
       }
     )
   }
@@ -389,7 +400,7 @@ export default class extends Controller {
       (data) => {
         this.showApiResponse(data)
 
-        if (data.isOK()) this.targets.find("signed-cms-signature-file").value = data.getResult()
+        if (data.isOk()) this.targets.find("signed-cms-signature-file").value = data.getResult()
       }
     )
   }
@@ -401,9 +412,10 @@ export default class extends Controller {
       this.targets.find("signed-cms-signature-file").value,
       (data) => {
         this.showApiResponse(data)
-
-        if (data.isOk())
-          this.markAsValidated(this.targets.find("check-cms-signature-file"), data.getResult())
+        this.markAsValidated(
+          this.targets.find("check-cms-signature-file"),
+          data.isOk() && data.getResult()
+        )
       }
     )
   }
@@ -421,8 +433,7 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.verifyXml(this.targets.find("signed-xml").value, (data) => {
       this.showApiResponse(data)
-
-      if (data.isOk()) this.markAsValidated(this.targets.find("check-xml"), data.getResult())
+      this.markAsValidated(this.targets.find("check-xml"), data.isOk() && data.getResult())
     })
   }
 
@@ -450,8 +461,7 @@ export default class extends Controller {
       this.targets.find("xml-node-root-check").value,
       (data) => {
         this.showApiResponse(data)
-
-        if (data.isOk()) this.markAsValidated(this.targets.find("check-xml-node"), data.getResult())
+        this.markAsValidated(this.targets.find("check-xml-node"), data.isOk() && data.getResult())
       }
     )
   }
