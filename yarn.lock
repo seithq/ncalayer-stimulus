@@ -787,10 +787,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@seithq/ncalayer@^0.2.8":
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/@seithq/ncalayer/-/ncalayer-0.2.8.tgz#ac8be00387440ce5ee8069db7571f16dd7339d42"
-  integrity sha512-NwdfELZmK+xYGqKFtNvyg5BqwzplQ1H+OYzLFY8zo18+2CNdZyFHbt81mnER2tNO5pTgoLQzgGvMJxljsRII9Q==
+"@seithq/ncalayer@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@seithq/ncalayer/-/ncalayer-0.3.0.tgz#af70d0d039eb1c6c4d478486fba8bb06cedb567f"
+  integrity sha512-UssrPwhtmq4yP24tYqAWWviNGJkbF7J4LLG+W8oIVLlj5KF2Smlo988zJy4CqxNKfJbtnN+LUIfA4vDr1dfA6Q==
 
 "@stimulus/core@^1.1.1":
   version "1.1.1"
@@ -2746,11 +2746,6 @@ he@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
-
-highlight.js@10.3.2:
-  version "10.3.2"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.3.2.tgz#135fd3619a00c3cbb8b4cd6dbc78d56bfcbc46f1"
-  integrity sha512-3jRT7OUYsVsKvukNKZCtnvRcFyCJqSEIuIMsEybAXRiFSwpt65qjPd/Pr+UOdYt7WJlt+lj3+ypUsHiySBp/Jw==
 
 hmac-drbg@^1.0.0:
   version "1.0.1"

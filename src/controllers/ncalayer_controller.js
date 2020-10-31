@@ -27,6 +27,11 @@ export default class extends Controller {
     "ui",
     "version",
 
+    "api-result",
+    "api-second-result",
+    "api-error-code",
+    "api-error-message",
+
     "path",
     "password",
     "key-list",
@@ -190,209 +195,239 @@ export default class extends Controller {
     ]
   }
 
-  showValidationError(data) {
-    alert(data.getErrorCode())
+  clearApiResponse() {
+    this.targets.find("api-result").value = ""
+    this.targets.find("api-second-result").value = ""
+    this.targets.find("api-error-code").value = ""
+    this.targets.find("api-error-message").value = ""
+  }
+
+  showApiResponse(data) {
+    this.targets.find("api-result").value = data.getResult()
+    this.targets.find("api-second-result").value = data.getSecondResult()
+    this.targets.find("api-error-code").value =
+      data.getErrorCode() === "NONE" ? "" : data.getErrorCode()
+
+    if (!data.isOk()) this.targets.find("api-error-message").value = this.getErrorMessage()
+  }
+
+  getErrorMessage(data) {
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
+
+    if (data.isPasswordAttemptsError()) {
+    }
   }
 
   // NCALayer API
 
   browseKeyStore(e) {
     this.data.set("storage", e.target.value)
+    this.clearApiResponse()
     this.client.browseKeyStore(e.target.value, "P12", "", (data) => {
-      if (data.isOk()) {
-        this.targets.find("path").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("path").value = data.getResult()
     })
   }
 
   getKeys() {
+    this.clearApiResponse()
     this.client.getKeys(
       this.data.get("storage"),
       this.targets.find("path").value,
       this.targets.find("password").value,
       this.data.get("keytype"),
       (data) => {
+        this.showApiResponse(data)
+
         if (data.isOk()) {
           const alias = extractKeyAlias(data.getResult())
           this.targets.find("key-list").append(new Option(data.getResult(), alias))
           this.data.set("alias", alias)
-        } else {
-          this.showValidationError(data)
         }
       }
     )
   }
 
   getNotBefore() {
+    this.clearApiResponse()
     this.client.getNotBefore(...this.secureFields(), (data) => {
-      if (data.isOk()) {
-        this.targets.find("not-before").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("not-before").value = data.getResult()
     })
   }
 
   getNotAfter() {
+    this.clearApiResponse()
     this.client.getNotAfter(...this.secureFields(), (data) => {
-      if (data.isOk()) {
-        this.targets.find("not-after").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("not-after").value = data.getResult()
     })
   }
 
   getSubjectDN() {
+    this.clearApiResponse()
     this.client.getSubjectDN(...this.secureFields(), (data) => {
-      if (data.isOk()) {
-        this.targets.find("subject-dn").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("subject-dn").value = data.getResult()
     })
   }
 
   getIssuerDN() {
+    this.clearApiResponse()
     this.client.getIssuerDN(...this.secureFields(), (data) => {
-      if (data.isOk()) {
-        this.targets.find("issuer-dn").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("issuer-dn").value = data.getResult()
     })
   }
 
   getRdnByOid() {
+    this.clearApiResponse()
     this.client.getRdnByOid(...this.secureFields(), this.data.get("oid"), 0, (data) => {
-      if (data.isOk()) {
-        this.targets.find("rdn").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("rdn").value = data.getResult()
     })
   }
 
   signPlainData() {
+    this.clearApiResponse()
     this.client.signPlainData(
       ...this.secureFields(),
       this.targets.find("plain-data").value,
       (data) => {
-        if (data.isOk()) {
-          this.targets.find("signed-plain-data").value = data.getResult()
-        } else {
-          this.showValidationError(data)
-        }
+        this.showApiResponse(data)
+
+        if (data.isOk()) this.targets.find("signed-plain-data").value = data.getResult()
       }
     )
   }
 
   verifyPlainData() {
+    this.clearApiResponse()
     this.client.verifyPlainData(
       ...this.secureFields(),
       this.targets.find("plain-data").value,
       this.targets.find("signed-plain-data").value,
       (data) => {
-        if (data.isOk()) {
-          this.markAsValidated(this.targets.find("check-data"), data.getResult())
-        } else {
-          this.showValidationError(data)
-        }
+        this.showApiResponse(data)
+
+        if (data.isOk()) this.markAsValidated(this.targets.find("check-data"), data.getResult())
       }
     )
   }
 
   createCMSSignature() {
+    this.clearApiResponse()
     this.client.createCMSSignature(
       ...this.secureFields(),
       this.targets.find("cms-signature").value,
       this.targets.find("cms-attachment").checked,
       (data) => {
-        if (data.isOk()) {
-          this.targets.find("signed-cms-signature").value = data.getResult()
-        } else {
-          this.showValidationError(data)
-        }
+        this.showApiResponse(data)
+
+        if (data.isOk()) this.targets.find("signed-cms-signature").value = data.getResult()
       }
     )
   }
 
   verifyCMSSignature() {
+    this.clearApiResponse()
     this.client.verifyCMSSignature(
       this.targets.find("cms-signature").value,
       this.targets.find("signed-cms-signature").value,
       (data) => {
-        if (data.isOk()) {
+        this.showApiResponse(data)
+
+        if (data.isOk())
           this.markAsValidated(this.targets.find("check-cms-signature"), data.getResult())
-        } else {
-          this.showValidationError(data)
-        }
       }
     )
   }
 
   showFileChooser() {
+    this.clearApiResponse()
     this.client.showFileChooser("ALL", "", (data) => {
-      if (data.isOk()) {
-        this.targets.find("cms-signature-file-path").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("cms-signature-file-path").value = data.getResult()
     })
   }
 
   createCMSSignatureFromFile() {
+    this.clearApiResponse()
     this.client.createCMSSignatureFromFile(
       ...this.secureFields(),
       this.targets.find("cms-signature-file-path").value,
       this.targets.find("cms-file-attachment").checked,
       (data) => {
-        if (data.isOK()) {
-          this.targets.find("signed-cms-signature-file").value = data.getResult()
-        } else {
-          this.showValidationError(data)
-        }
+        this.showApiResponse(data)
+
+        if (data.isOK()) this.targets.find("signed-cms-signature-file").value = data.getResult()
       }
     )
   }
 
   verifyCMSSignatureFromFile() {
+    this.clearApiResponse()
     this.client.verifyCMSSignatureFromFile(
       this.targets.find("cms-signature-file-path").value,
       this.targets.find("signed-cms-signature-file").value,
       (data) => {
-        if (data.isOk()) {
+        this.showApiResponse(data)
+
+        if (data.isOk())
           this.markAsValidated(this.targets.find("check-cms-signature-file"), data.getResult())
-        } else {
-          this.showValidationError(data)
-        }
       }
     )
   }
 
   signXml() {
+    this.clearApiResponse()
     this.client.signXml(...this.secureFields(), this.targets.find("xml").value, (data) => {
-      if (data.isOk()) {
-        this.targets.find("signed-xml").value = data.getResult()
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.targets.find("signed-xml").value = data.getResult()
     })
   }
 
   verifyXml() {
+    this.clearApiResponse()
     this.client.verifyXml(this.targets.find("signed-xml").value, (data) => {
-      if (data.isOk()) {
-        this.markAsValidated(this.targets.find("check-xml"), data.getResult())
-      } else {
-        this.showValidationError(data)
-      }
+      this.showApiResponse(data)
+
+      if (data.isOk()) this.markAsValidated(this.targets.find("check-xml"), data.getResult())
     })
   }
 
   signXmlByElementId() {
+    this.clearApiResponse()
     this.client.signXmlByElementId(
       ...this.secureFields(),
       this.targets.find("xml-node").value,
@@ -400,40 +435,36 @@ export default class extends Controller {
       this.targets.find("xml-node-attribute").value,
       this.targets.find("xml-node-root").value,
       (data) => {
-        if (data.isOk()) {
-          this.targets.find("signed-xml-node").value = data.getResult()
-        } else {
-          this.showValidationError(data)
-        }
+        this.showApiResponse(data)
+
+        if (data.isOk()) this.targets.find("signed-xml-node").value = data.getResult()
       }
     )
   }
 
   verifyXmlByElementId() {
+    this.clearApiResponse()
     this.client.verifyXmlByElementId(
       this.targets.find("signed-xml-node").value,
       this.targets.find("xml-node-attribute-check").value,
       this.targets.find("xml-node-root-check").value,
       (data) => {
-        if (data.isOk()) {
-          this.markAsValidated(this.targets.find("check-xml-node"), data.getResult())
-        } else {
-          this.showValidationError(data)
-        }
+        this.showApiResponse(data)
+
+        if (data.isOk()) this.markAsValidated(this.targets.find("check-xml-node"), data.getResult())
       }
     )
   }
 
   getHash() {
+    this.clearApiResponse()
     this.client.getHash(
       this.targets.find("hash-data").value,
       this.targets.find("algorithm").value,
       (data) => {
-        if (data.isOk()) {
-          this.targets.find("hash").value = data.getResult()
-        } else {
-          this.showValidationError(data)
-        }
+        this.showApiResponse(data)
+
+        if (data.isOk()) this.targets.find("hash").value = data.getResult()
       }
     )
   }
