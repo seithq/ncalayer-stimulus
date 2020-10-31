@@ -130,10 +130,6 @@ export default class extends Controller {
     this.targets.find("error").classList.add("hidden")
   }
 
-  get oid() {
-    return parseInt(this.data.get("oid"))
-  }
-
   markAsRadioButton(element, isActive) {
     if (isActive) {
       element.classList.add("bg-teal-700", "text-white")
@@ -194,12 +190,20 @@ export default class extends Controller {
     ]
   }
 
+  showValidationError(data) {
+    alert(data.getErrorCode())
+  }
+
   // NCALayer API
 
   browseKeyStore(e) {
     this.data.set("storage", e.target.value)
     this.client.browseKeyStore(e.target.value, "P12", "", (data) => {
-      this.targets.find("path").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("path").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
@@ -210,40 +214,64 @@ export default class extends Controller {
       this.targets.find("password").value,
       this.data.get("keytype"),
       (data) => {
-        const alias = extractKeyAlias(data.getResult())
-        this.targets.find("key-list").append(new Option(data.getResult(), alias))
-        this.data.set("alias", alias)
+        if (data.isOk()) {
+          const alias = extractKeyAlias(data.getResult())
+          this.targets.find("key-list").append(new Option(data.getResult(), alias))
+          this.data.set("alias", alias)
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
 
   getNotBefore() {
     this.client.getNotBefore(...this.secureFields(), (data) => {
-      this.targets.find("not-before").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("not-before").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
   getNotAfter() {
     this.client.getNotAfter(...this.secureFields(), (data) => {
-      this.targets.find("not-after").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("not-after").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
   getSubjectDN() {
     this.client.getSubjectDN(...this.secureFields(), (data) => {
-      this.targets.find("subject-dn").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("subject-dn").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
   getIssuerDN() {
     this.client.getIssuerDN(...this.secureFields(), (data) => {
-      this.targets.find("issuer-dn").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("issuer-dn").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
   getRdnByOid() {
     this.client.getRdnByOid(...this.secureFields(), this.data.get("oid"), 0, (data) => {
-      this.targets.find("rdn").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("rdn").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
@@ -252,7 +280,11 @@ export default class extends Controller {
       ...this.secureFields(),
       this.targets.find("plain-data").value,
       (data) => {
-        this.targets.find("signed-plain-data").value = data.getResult()
+        if (data.isOk()) {
+          this.targets.find("signed-plain-data").value = data.getResult()
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
@@ -263,7 +295,11 @@ export default class extends Controller {
       this.targets.find("plain-data").value,
       this.targets.find("signed-plain-data").value,
       (data) => {
-        this.markAsValidated(this.targets.find("check-data"), data.getResult())
+        if (data.isOk()) {
+          this.markAsValidated(this.targets.find("check-data"), data.getResult())
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
@@ -274,7 +310,11 @@ export default class extends Controller {
       this.targets.find("cms-signature").value,
       this.targets.find("cms-attachment").checked,
       (data) => {
-        this.targets.find("signed-cms-signature").value = data.getResult()
+        if (data.isOk()) {
+          this.targets.find("signed-cms-signature").value = data.getResult()
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
@@ -284,14 +324,22 @@ export default class extends Controller {
       this.targets.find("cms-signature").value,
       this.targets.find("signed-cms-signature").value,
       (data) => {
-        this.markAsValidated(this.targets.find("check-cms-signature"), data.getResult())
+        if (data.isOk()) {
+          this.markAsValidated(this.targets.find("check-cms-signature"), data.getResult())
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
 
   showFileChooser() {
     this.client.showFileChooser("ALL", "", (data) => {
-      this.targets.find("cms-signature-file-path").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("cms-signature-file-path").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
@@ -301,7 +349,11 @@ export default class extends Controller {
       this.targets.find("cms-signature-file-path").value,
       this.targets.find("cms-file-attachment").checked,
       (data) => {
-        this.targets.find("signed-cms-signature-file").value = data.getResult()
+        if (data.isOK()) {
+          this.targets.find("signed-cms-signature-file").value = data.getResult()
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
@@ -311,20 +363,32 @@ export default class extends Controller {
       this.targets.find("cms-signature-file-path").value,
       this.targets.find("signed-cms-signature-file").value,
       (data) => {
-        this.markAsValidated(this.targets.find("check-cms-signature-file"), data.getResult())
+        if (data.isOk()) {
+          this.markAsValidated(this.targets.find("check-cms-signature-file"), data.getResult())
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
 
   signXml() {
     this.client.signXml(...this.secureFields(), this.targets.find("xml").value, (data) => {
-      this.targets.find("signed-xml").value = data.getResult()
+      if (data.isOk()) {
+        this.targets.find("signed-xml").value = data.getResult()
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
   verifyXml() {
     this.client.verifyXml(this.targets.find("signed-xml").value, (data) => {
-      this.markAsValidated(this.targets.find("check-xml"), data.getResult())
+      if (data.isOk()) {
+        this.markAsValidated(this.targets.find("check-xml"), data.getResult())
+      } else {
+        this.showValidationError(data)
+      }
     })
   }
 
@@ -336,7 +400,11 @@ export default class extends Controller {
       this.targets.find("xml-node-attribute").value,
       this.targets.find("xml-node-root").value,
       (data) => {
-        this.targets.find("signed-xml-node").value = data.getResult()
+        if (data.isOk()) {
+          this.targets.find("signed-xml-node").value = data.getResult()
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
@@ -347,7 +415,11 @@ export default class extends Controller {
       this.targets.find("xml-node-attribute-check").value,
       this.targets.find("xml-node-root-check").value,
       (data) => {
-        this.markAsValidated(this.targets.find("check-xml-node"), data.getResult())
+        if (data.isOk()) {
+          this.markAsValidated(this.targets.find("check-xml-node"), data.getResult())
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
@@ -357,7 +429,11 @@ export default class extends Controller {
       this.targets.find("hash-data").value,
       this.targets.find("algorithm").value,
       (data) => {
-        this.targets.find("hash").value = data.getResult()
+        if (data.isOk()) {
+          this.targets.find("hash").value = data.getResult()
+        } else {
+          this.showValidationError(data)
+        }
       }
     )
   }
