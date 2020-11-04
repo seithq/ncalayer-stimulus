@@ -244,6 +244,10 @@ export default class extends Controller {
       return "Неверный или пустой тип хранилища"
     }
 
+    if (data.isFileReadError()) {
+      return "Ошибка чтения файла"
+    }
+
     if (data.isCommonError()) {
       return "Общая ошибка"
     }
@@ -258,7 +262,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.browseKeyStore(e.target.value, "P12", "", (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("path").value = data.getResult()
     })
   }
@@ -272,7 +275,6 @@ export default class extends Controller {
       this.data.get("keytype"),
       (data) => {
         this.showApiResponse(data)
-
         if (data.isOk()) {
           const alias = extractKeyAlias(data.getResult())
           this.targets.find("key-list").append(new Option(data.getResult(), alias))
@@ -286,7 +288,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.getNotBefore(...this.secureFields(), (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("not-before").value = data.getResult()
     })
   }
@@ -295,7 +296,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.getNotAfter(...this.secureFields(), (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("not-after").value = data.getResult()
     })
   }
@@ -304,7 +304,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.getSubjectDN(...this.secureFields(), (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("subject-dn").value = data.getResult()
     })
   }
@@ -313,7 +312,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.getIssuerDN(...this.secureFields(), (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("issuer-dn").value = data.getResult()
     })
   }
@@ -322,7 +320,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.getRdnByOid(...this.secureFields(), this.data.get("oid"), 0, (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("rdn").value = data.getResult()
     })
   }
@@ -334,7 +331,6 @@ export default class extends Controller {
       this.targets.find("plain-data").value,
       (data) => {
         this.showApiResponse(data)
-
         if (data.isOk()) this.targets.find("signed-plain-data").value = data.getResult()
       }
     )
@@ -361,7 +357,6 @@ export default class extends Controller {
       this.targets.find("cms-attachment").checked,
       (data) => {
         this.showApiResponse(data)
-
         if (data.isOk()) this.targets.find("signed-cms-signature").value = data.getResult()
       }
     )
@@ -386,7 +381,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.showFileChooser("ALL", "", (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("cms-signature-file-path").value = data.getResult()
     })
   }
@@ -399,7 +393,6 @@ export default class extends Controller {
       this.targets.find("cms-file-attachment").checked,
       (data) => {
         this.showApiResponse(data)
-
         if (data.isOk()) this.targets.find("signed-cms-signature-file").value = data.getResult()
       }
     )
@@ -424,7 +417,6 @@ export default class extends Controller {
     this.clearApiResponse()
     this.client.signXml(...this.secureFields(), this.targets.find("xml").value, (data) => {
       this.showApiResponse(data)
-
       if (data.isOk()) this.targets.find("signed-xml").value = data.getResult()
     })
   }
@@ -447,7 +439,6 @@ export default class extends Controller {
       this.targets.find("xml-node-root").value,
       (data) => {
         this.showApiResponse(data)
-
         if (data.isOk()) this.targets.find("signed-xml-node").value = data.getResult()
       }
     )
@@ -473,7 +464,6 @@ export default class extends Controller {
       this.targets.find("algorithm").value,
       (data) => {
         this.showApiResponse(data)
-
         if (data.isOk()) this.targets.find("hash").value = data.getResult()
       }
     )
